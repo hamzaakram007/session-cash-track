@@ -34,6 +34,12 @@ export function LedgerApp() {
   const [ready, setReady] = useState(false);
   const [sessions, setSessions] = useState<SessionEntry[]>([]);
   const [paywall, setPaywall] = useState<"sync" | "export" | "profiles" | null>(null);
+  const [toast, setToast] = useState<string | null>(null);
+  const [formError, setFormError] = useState<string | null>(null);
+  const [canInstall, setCanInstall] = useState(false);
+  const [deferredPrompt, setDeferredPrompt] = useState<{
+    prompt: () => Promise<void>;
+  } | null>(null);
 
   const [date, setDate] = useState("");
   const [pocket, setPocket] = useState("");
@@ -53,6 +59,23 @@ export function LedgerApp() {
     saveSessions(sessions);
   }, [sessions, ready]);
 
+  useEffect(() => {
+    if (!toast) return;
+    const t = window.setTimeout(() => setToast(null), 2400);
+    return () => window.clearTimeout(t);
+  }, [toast]);
+
+  useEffect(() => {
+    const onBip = (e: Event) => {
+      e.preventDefault();
+      const ev = e as Event & { prompt: () => Promise<void> };
+      setDeferredPrompt(ev);
+      setCanInstall(true);
+    };
+    window.addEventListener("beforeinstallprompt", onBip);
+    return () => window.removeEventListener("beforeinstallprompt", onBip);
+  }, []);
+
   const sorted = useMemo(
     () =>
       [...sessions].sort((a, b) => {
@@ -67,28 +90,45 @@ export function LedgerApp() {
   const streak = currentStreak(sessions);
   const totalPocket = sessions.reduce((s, x) => s + Math.max(0, x.pocket), 0);
   const totalBank = sessions.reduce((s, x) => s + Math.max(0, x.bank), 0);
+  const bankedCount = sessions.filter((s) => s.bankedBeforeRisk).length;
+
+  function flash(message: string) {
+    setToast(message);
+  }
+
+  async function installPwa() {
+    if (!deferredPrompt) return;
+    await deferredPrompt.prompt();
+    setCanInstall(false);
+    setDeferredPrompt(null);
+  }
 
   function onSubmit(e: FormEvent) {
     e.preventDefault();
+    setFormError(null);
     const pocketN = Number(pocket);
     const bankN = Number(bank);
     const minutesN = minutes.trim() === "" ? 0 : Number(minutes);
+    if (!date) {
+      setFormError("Pick a date for this session.");
+      return;
+    }
     if (!Number.isFinite(pocketN) || pocketN < 0) {
-      alert("Enter a pocket amount (0 or higher).");
+      setFormError("Enter pocket cash as 0 or higher.");
       return;
     }
     if (!Number.isFinite(bankN) || bankN < 0) {
-      alert("Enter a bank amount (0 or higher).");
+      setFormError("Enter bank balance as 0 or higher.");
       return;
     }
     if (!Number.isFinite(minutesN) || minutesN < 0) {
-      alert("Session minutes must be 0 or higher.");
+      setFormError("Session minutes must be 0 or higher.");
       return;
     }
 
     const entry: SessionEntry = {
       id: createSessionId(),
-      date: date || todayISO(),
+      date,
       pocket: Math.round(pocketN),
       bank: Math.round(bankN),
       bankedBeforeRisk,
@@ -103,16 +143,19 @@ export function LedgerApp() {
     setMinutes("");
     setNote("");
     setBankedBeforeRisk(true);
+    flash(bankedBeforeRisk ? "Session saved · banked-first habit counted" : "Session saved");
   }
 
   function deleteSession(id: string) {
     if (!confirm("Delete this session log?")) return;
     setSessions((prev) => prev.filter((s) => s.id !== id));
+    flash("Session deleted");
   }
 
   function clearAll() {
     if (!confirm("Clear all session logs on this device?")) return;
     setSessions([]);
+    flash("All local logs cleared");
   }
 
   if (!ready) {
@@ -124,7 +167,16 @@ export function LedgerApp() {
   }
 
   return (
-    <div className="mx-auto flex min-h-full w-full max-w-lg flex-col px-4 pb-12 pt-6 sm:px-6">
+    <div className="mx-auto flex min-h-full w-full max-w-lg flex-col px-4 pb-14 pt-6 sm:px-6">
+      {toast ? (
+        <div
+          role="status"
+          className="fixed bottom-5 left-1/2 z-40 w-[min(92vw,24rem)] -translate-x-1/2 rounded-xl border border-[var(--mint)]/30 bg-[var(--panel)] px-4 py-3 text-center text-sm text-[var(--foam)] shadow-lg"
+        >
+          {toast}
+        </div>
+      ) : null}
+
       <header className="animate-glow relative overflow-hidden rounded-3xl border border-[var(--line)] bg-[var(--panel)] px-5 py-6">
         <div
           className="pointer-events-none absolute inset-0 opacity-90"
@@ -135,13 +187,18 @@ export function LedgerApp() {
           }}
         />
         <div className="relative">
-          <p className="text-[11px] font-semibold uppercase tracking-[0.28em] text-[var(--mint)]">
-            Shore Ledger
-          </p>
+          <div className="flex flex-wrap items-center justify-between gap-2">
+            <p className="text-[11px] font-semibold uppercase tracking-[0.28em] text-[var(--mint)]">
+              Shore Ledger
+            </p>
+            <span className="rounded-full border border-[var(--line)] bg-black/25 px-2.5 py-0.5 text-[10px] uppercase tracking-wide text-[var(--muted)]">
+              Local-first PWA
+            </span>
+          </div>
           <h1 className="mt-2 font-[family-name:var(--font-display)] text-[2.2rem] leading-[1.05] tracking-tight text-[var(--foam)]">
             Session cash habits
           </h1>
-          <p className="mt-3 max-w-[32ch] text-sm leading-relaxed text-[var(--muted)]">
+          <p className="mt-3 max-w-[34ch] text-sm leading-relaxed text-[var(--muted)]">
             Log pocket vs bank after each play session. Self-report only — no game hooks, no
             spoilers.
           </p>
@@ -152,7 +209,9 @@ export function LedgerApp() {
               <p className="mt-1 font-[family-name:var(--font-display)] text-2xl text-[var(--foam)]">
                 {score}%
               </p>
-              <p className="text-[11px] text-[var(--muted)]">banked first</p>
+              <p className="text-[11px] text-[var(--muted)]">
+                {bankedCount}/{sessions.length || 0} banked first
+              </p>
             </div>
             <div className="rounded-2xl border border-[var(--line)] bg-black/20 px-3 py-3">
               <p className="text-[10px] uppercase tracking-wider text-[var(--muted)]">Streak</p>
@@ -169,6 +228,16 @@ export function LedgerApp() {
               <p className="text-[11px] text-[var(--muted)]">sessions</p>
             </div>
           </div>
+
+          {canInstall ? (
+            <button
+              type="button"
+              onClick={installPwa}
+              className="mt-4 w-full rounded-xl border border-[var(--mint)]/35 bg-[var(--mint)]/10 px-3 py-2.5 text-sm font-medium text-[var(--mint)] transition hover:bg-[var(--mint)]/15"
+            >
+              Install Shore Ledger on this device
+            </button>
+          ) : null}
         </div>
       </header>
 
@@ -181,10 +250,14 @@ export function LedgerApp() {
             <span>Pocket vs bank (totals you entered)</span>
             <span className="text-[var(--foam)]">{share}% banked</span>
           </div>
-          <div className="flex h-3 overflow-hidden rounded-full bg-[var(--panel-2)]">
+          <div
+            className="flex h-3 overflow-hidden rounded-full bg-[var(--panel-2)]"
+            role="img"
+            aria-label={`Bank share ${share} percent of logged totals`}
+          >
             <div
               className="bg-[var(--sand)] transition-all duration-500"
-              style={{ width: `${100 - share}%` }}
+              style={{ width: `${Math.max(0, 100 - share)}%` }}
               title="Pocket"
             />
             <div
@@ -207,7 +280,7 @@ export function LedgerApp() {
         <p className="mt-1 text-sm text-[var(--muted)]">
           Enter numbers from your screen. We never read the game.
         </p>
-        <form className="mt-4 space-y-3" onSubmit={onSubmit}>
+        <form className="mt-4 space-y-3" onSubmit={onSubmit} noValidate>
           <label className="block text-sm">
             <span className="text-[var(--muted)]">Date</span>
             <input
@@ -261,7 +334,7 @@ export function LedgerApp() {
               className="mt-1 w-full rounded-xl border border-[var(--line)] bg-[var(--panel-2)] px-3 py-2.5 text-[var(--foam)] outline-none focus:border-[var(--mint)]/50"
             />
           </label>
-          <label className="flex cursor-pointer items-start gap-3 rounded-xl border border-[var(--line)] bg-[var(--panel-2)] px-3 py-3 text-sm">
+          <label className="flex cursor-pointer items-start gap-3 rounded-xl border border-[var(--line)] bg-[var(--panel-2)] px-3 py-3 text-sm transition hover:border-[var(--mint)]/25">
             <input
               type="checkbox"
               checked={bankedBeforeRisk}
@@ -271,7 +344,7 @@ export function LedgerApp() {
             <span>
               <span className="block text-[var(--foam)]">Banked before a risky job</span>
               <span className="mt-0.5 block text-xs text-[var(--muted)]">
-                Check this when you moved cash to the bank first. Builds your habit score.
+                Check when you moved cash to the bank first. Builds your habit score.
               </span>
             </span>
           </label>
@@ -286,56 +359,76 @@ export function LedgerApp() {
               className="mt-1 w-full rounded-xl border border-[var(--line)] bg-[var(--panel-2)] px-3 py-2.5 text-[var(--foam)] outline-none focus:border-[var(--mint)]/50"
             />
           </label>
+          {formError ? (
+            <p className="rounded-xl border border-[var(--sand)]/30 bg-[var(--sand)]/10 px-3 py-2 text-sm text-[var(--sand)]" role="alert">
+              {formError}
+            </p>
+          ) : null}
           <button
             type="submit"
-            className="w-full rounded-xl bg-[var(--mint)] px-4 py-3 text-sm font-semibold text-[#041018] transition hover:brightness-110"
+            className="w-full rounded-xl bg-[var(--mint)] px-4 py-3 text-sm font-semibold text-[#041018] transition hover:brightness-110 active:scale-[0.99]"
           >
             Save session
           </button>
         </form>
       </section>
 
-      <section className="mt-5 flex flex-wrap gap-2">
-        <button
-          type="button"
-          onClick={() => setPaywall("sync")}
-          className="rounded-xl border border-[var(--line)] bg-[var(--panel)] px-3 py-2 text-sm text-[var(--foam)] transition hover:border-[var(--mint)]/40"
-        >
-          Sync (Pro)
-        </button>
-        <button
-          type="button"
-          onClick={() => setPaywall("export")}
-          className="rounded-xl border border-[var(--line)] bg-[var(--panel)] px-3 py-2 text-sm text-[var(--foam)] transition hover:border-[var(--mint)]/40"
-        >
-          Export CSV (Pro)
-        </button>
-        <button
-          type="button"
-          onClick={() => setPaywall("profiles")}
-          className="rounded-xl border border-[var(--line)] bg-[var(--panel)] px-3 py-2 text-sm text-[var(--foam)] transition hover:border-[var(--mint)]/40"
-        >
-          Profiles (Pro)
-        </button>
-        {sessions.length > 0 && (
+      <section className="mt-5">
+        <p className="mb-2 text-[11px] uppercase tracking-[0.18em] text-[var(--muted)]">
+          Pro features · stub only
+        </p>
+        <div className="flex flex-wrap gap-2">
           <button
             type="button"
-            onClick={clearAll}
-            className="rounded-xl border border-[var(--line)] bg-[var(--panel)] px-3 py-2 text-sm text-[var(--muted)] transition hover:text-[var(--foam)]"
+            onClick={() => setPaywall("sync")}
+            className="rounded-xl border border-[var(--line)] bg-[var(--panel)] px-3 py-2 text-sm text-[var(--foam)] transition hover:border-[var(--mint)]/40"
           >
-            Clear all
+            Sync
           </button>
-        )}
+          <button
+            type="button"
+            onClick={() => setPaywall("export")}
+            className="rounded-xl border border-[var(--line)] bg-[var(--panel)] px-3 py-2 text-sm text-[var(--foam)] transition hover:border-[var(--mint)]/40"
+          >
+            Export CSV
+          </button>
+          <button
+            type="button"
+            onClick={() => setPaywall("profiles")}
+            className="rounded-xl border border-[var(--line)] bg-[var(--panel)] px-3 py-2 text-sm text-[var(--foam)] transition hover:border-[var(--mint)]/40"
+          >
+            Profiles
+          </button>
+          {sessions.length > 0 ? (
+            <button
+              type="button"
+              onClick={clearAll}
+              className="rounded-xl border border-[var(--line)] bg-[var(--panel)] px-3 py-2 text-sm text-[var(--muted)] transition hover:text-[var(--foam)]"
+            >
+              Clear all
+            </button>
+          ) : null}
+        </div>
       </section>
 
       <section className="mt-6">
-        <h2 className="font-[family-name:var(--font-display)] text-xl text-[var(--foam)]">
-          History
-        </h2>
-        <p className="mt-1 text-sm text-[var(--muted)]">Newest first · stored on this device</p>
+        <div className="flex items-end justify-between gap-3">
+          <div>
+            <h2 className="font-[family-name:var(--font-display)] text-xl text-[var(--foam)]">
+              History
+            </h2>
+            <p className="mt-1 text-sm text-[var(--muted)]">Newest first · this device only</p>
+          </div>
+          {sessions.length > 0 ? (
+            <p className="text-xs text-[var(--muted)]">{sessions.length} saved</p>
+          ) : null}
+        </div>
         {sorted.length === 0 ? (
-          <div className="mt-4 rounded-2xl border border-dashed border-[var(--line)] bg-[var(--panel)] px-4 py-8 text-center text-sm text-[var(--muted)]">
-            No sessions yet. Log pocket and bank after your next play.
+          <div className="mt-4 rounded-2xl border border-dashed border-[var(--line)] bg-[var(--panel)] px-4 py-8 text-center">
+            <p className="text-sm text-[var(--foam)]">No sessions yet</p>
+            <p className="mt-1 text-xs text-[var(--muted)]">
+              After you play, enter pocket + bank and tap Save session.
+            </p>
           </div>
         ) : (
           <ul className="mt-4 space-y-3">
@@ -391,7 +484,7 @@ export function LedgerApp() {
           commission. Numbers you enter stay local unless you unlock Pro sync later.
         </p>
         <p>
-          Soft link placeholder:{" "}
+          Soft link:{" "}
           <a
             href="https://console-gear-hub.vercel.app"
             className="text-[var(--mint)] underline-offset-2 hover:underline"
@@ -403,7 +496,11 @@ export function LedgerApp() {
         </p>
       </footer>
 
-      <ProPaywall open={paywall !== null} feature={paywall ?? "sync"} onClose={() => setPaywall(null)} />
+      <ProPaywall
+        open={paywall !== null}
+        feature={paywall ?? "sync"}
+        onClose={() => setPaywall(null)}
+      />
     </div>
   );
 }

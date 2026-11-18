@@ -1,4 +1,4 @@
-const CACHE = "shore-ledger-v1";
+const CACHE = "shore-ledger-v2";
 const ASSETS = ["/", "/manifest.webmanifest", "/icon-192.svg", "/icon-512.svg"];
 
 self.addEventListener("install", (event) => {

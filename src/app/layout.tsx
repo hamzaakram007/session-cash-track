@@ -15,12 +15,49 @@ const display = Fraunces({
   weight: ["500", "600", "700"],
 });
 
+const siteUrl = "https://session-cash-track.vercel.app";
+const title = "Shore Ledger — session cash & bank habit tracker";
+const description =
+  "Log pocket cash and bank balance after each play session. Local-first habit score, streak, and history. No game hooks. Independent fan utility — not affiliated with Rockstar.";
+
 export const metadata: Metadata = {
-  title: "Shore Ledger — session cash & bank habit tracker",
-  description:
-    "Mobile-friendly PWA to log in-game pocket and bank habits each session. Local-first; Pro stub for sync and export. Independent fan utility.",
+  metadataBase: new URL(siteUrl),
+  title: {
+    default: title,
+    template: "%s · Shore Ledger",
+  },
+  description,
   applicationName: "Shore Ledger",
+  authors: [{ name: "Hamza Akram" }],
+  creator: "Hamza Akram",
+  keywords: [
+    "session cash tracker",
+    "bank habit tracker",
+    "gaming money habits",
+    "local-first PWA",
+    "Shore Ledger",
+  ],
   manifest: "/manifest.webmanifest",
+  alternates: {
+    canonical: "/",
+  },
+  openGraph: {
+    type: "website",
+    url: siteUrl,
+    siteName: "Shore Ledger",
+    title: "Shore Ledger",
+    description,
+    locale: "en_US",
+  },
+  twitter: {
+    card: "summary",
+    title: "Shore Ledger",
+    description,
+  },
+  robots: {
+    index: true,
+    follow: true,
+  },
   appleWebApp: {
     capable: true,
     statusBarStyle: "black-translucent",
@@ -30,6 +67,7 @@ export const metadata: Metadata = {
     icon: [{ url: "/icon-192.svg", type: "image/svg+xml" }],
     apple: [{ url: "/icon-192.svg" }],
   },
+  category: "productivity",
 };
 
 export const viewport: Viewport = {
