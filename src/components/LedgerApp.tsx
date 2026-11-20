@@ -375,7 +375,7 @@ export function LedgerApp() {
 
       <section className="mt-5">
         <p className="mb-2 text-[11px] uppercase tracking-[0.18em] text-[var(--muted)]">
-          Pro features · stub only
+          Pro features · coming soon
         </p>
         <div className="flex flex-wrap gap-2">
           <button

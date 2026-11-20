@@ -9,15 +9,15 @@ type ProPaywallProps = {
 const COPY = {
   sync: {
     title: "Cloud sync",
-    body: "Pro would keep Shore Ledger sessions on every device. Today this is a checkout stub — nothing is charged.",
+    body: "Keep Shore Ledger sessions on every device with Pro. Secure checkout isn’t available yet — you won’t be charged.",
   },
   export: {
     title: "CSV export",
-    body: "Pro would unlock a clean CSV of pocket vs bank for spreadsheets. Today this is a checkout stub — nothing is charged.",
+    body: "Export a clean CSV of pocket vs bank for spreadsheets with Pro. Secure checkout isn’t available yet — you won’t be charged.",
   },
   profiles: {
     title: "Multiple profiles",
-    body: "Pro would add extra profiles for shared consoles. Today this is a checkout stub — nothing is charged.",
+    body: "Add extra profiles for shared consoles with Pro. Secure checkout isn’t available yet — you won’t be charged.",
   },
 } as const;
 
@@ -43,7 +43,7 @@ export function ProPaywall({ open, feature, onClose }: ProPaywallProps) {
               Shore Ledger Pro
             </p>
             <span className="rounded-full border border-[var(--sand)]/40 bg-[var(--sand)]/10 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-[var(--sand)]">
-              Stub · not live
+              Coming soon
             </span>
           </div>
           <h2
@@ -66,7 +66,7 @@ export function ProPaywall({ open, feature, onClose }: ProPaywallProps) {
               </ul>
             </div>
             <div className="rounded-xl border border-[var(--mint)]/30 bg-[var(--mint)]/5 px-3 py-3">
-              <p className="font-semibold text-[var(--mint)]">Pro (planned)</p>
+              <p className="font-semibold text-[var(--mint)]">Pro</p>
               <ul className="mt-2 space-y-1.5 text-[var(--muted)]">
                 <li>Cloud sync</li>
                 <li>CSV export</li>
@@ -79,11 +79,11 @@ export function ProPaywall({ open, feature, onClose }: ProPaywallProps) {
             <p className="font-[family-name:var(--font-display)] text-3xl text-[var(--foam)]">
               $4.99
               <span className="ml-1 text-sm font-sans font-normal text-[var(--muted)]">
-                one-time · placeholder
+                one-time
               </span>
             </p>
             <p className="mt-1 text-xs text-[var(--muted)]">
-              No Lemon Squeezy / Stripe yet. Tapping Unlock only shows an alert.
+              Checkout isn’t live yet. You won’t be charged if you continue.
             </p>
           </div>
           <button
@@ -91,11 +91,11 @@ export function ProPaywall({ open, feature, onClose }: ProPaywallProps) {
             className="w-full rounded-xl bg-[var(--mint)] px-4 py-3 text-sm font-semibold text-[#041018] transition hover:brightness-110"
             onClick={() =>
               alert(
-                "Pro checkout stub — not charged. Wire Lemon Squeezy or Stripe here later. Local session logs stay free."
+                "Pro checkout isn’t available yet — you weren’t charged. Local session logs stay free."
               )
             }
           >
-            Unlock Pro (demo stub)
+            Unlock Pro
           </button>
           <button
             type="button"

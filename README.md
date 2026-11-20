@@ -1,11 +1,11 @@
 # Shore Ledger
 
-Session **cash / bank habit tracker** PWA (high-level MVP + harden pass).
+Session **cash / bank habit tracker** PWA under the NeonGulf brand.
 
 **Brand:** Shore Ledger — independent fan utility.  
 **Not affiliated** with Take-Two Interactive or Rockstar Games. No Rockstar assets, maps, or trademarks.
 
-**Live:** https://session-cash-track.vercel.app  
+**Live:** https://cash.neongulf.com  
 **Repo:** https://github.com/hamzaakram007/session-cash-track
 
 ## What it does
@@ -17,14 +17,14 @@ Session **cash / bank habit tracker** PWA (high-level MVP + harden pass).
 | Day streak + pocket-vs-bank bar | ✅ Free |
 | History list (edit/delete/clear) | ✅ Free |
 | Installable PWA (manifest + SW) | ✅ |
-| Cloud sync / CSV export / profiles | 🟨 **Pro stub only** (alert; no payment) |
+| Cloud sync / CSV export / profiles | 🟨 Pro · checkout coming soon |
 
 Self-report only — **no game hooks**, APIs, or spoilers.
 
-## Free vs Pro (stub)
+## Free vs Pro
 
 - **Free forever:** session logs, habit score, streak, history on this device.
-- **Pro (planned, not wired):** cloud sync, CSV export, multiple profiles — **$4.99 one-time placeholder**. Checkout shows an alert only; nothing is charged.
+- **Pro (coming soon):** cloud sync, CSV export, multiple profiles — planned at **$4.99 one-time**. Checkout isn’t live yet; nothing is charged today.
 
 ## Run locally
 
