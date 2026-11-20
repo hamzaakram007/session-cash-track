@@ -8,7 +8,7 @@ const jsonLd = {
   operatingSystem: "Any",
   description:
     "Local-first session cash and bank habit tracker PWA. Log pocket vs bank after play sessions — no game hooks.",
-  url: "https://session-cash-track.vercel.app",
+  url: "https://cash.neongulf.com",
   offers: {
     "@type": "Offer",
     price: "0",

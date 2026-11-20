@@ -189,7 +189,7 @@ export function LedgerApp() {
         <div className="relative">
           <div className="flex flex-wrap items-center justify-between gap-2">
             <p className="text-[11px] font-semibold uppercase tracking-[0.28em] text-[var(--mint)]">
-              Shore Ledger
+              Shore Ledger · NeonGulf
             </p>
             <span className="rounded-full border border-[var(--line)] bg-black/25 px-2.5 py-0.5 text-[10px] uppercase tracking-wide text-[var(--muted)]">
               Local-first PWA
@@ -476,22 +476,30 @@ export function LedgerApp() {
 
       <footer className="mt-10 space-y-2 border-t border-[var(--line)] pt-6 text-center text-xs leading-relaxed text-[var(--muted)]">
         <p>
-          <strong className="font-medium text-[var(--foam)]/80">Shore Ledger</strong> is an
-          independent habit tool. Not affiliated with Take-Two Interactive or Rockstar Games.
-        </p>
-        <p>
-          Affiliate disclosure: future soft links to headset / SSD gear hubs may earn a
-          commission. Numbers you enter stay local unless you unlock Pro sync later.
-        </p>
-        <p>
-          Soft link:{" "}
+          <strong className="font-medium text-[var(--foam)]/80">Shore Ledger</strong> by{" "}
           <a
-            href="https://console-gear-hub.vercel.app"
+            href="https://neongulf.com"
             className="text-[var(--mint)] underline-offset-2 hover:underline"
             target="_blank"
             rel="noreferrer"
           >
-            Console Gear Hub
+            NeonGulf
+          </a>
+          . Independent habit tool — not affiliated with Take-Two Interactive or Rockstar Games.
+        </p>
+        <p>
+          Affiliate disclosure: soft links to gear guides may earn a commission. Numbers you
+          enter stay on this device unless you unlock Pro sync later.
+        </p>
+        <p>
+          Soft link:{" "}
+          <a
+            href="https://gear.neongulf.com"
+            className="text-[var(--mint)] underline-offset-2 hover:underline"
+            target="_blank"
+            rel="noreferrer"
+          >
+            NeonGulf Gear
           </a>
         </p>
       </footer>

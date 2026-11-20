@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://session-cash-track.vercel.app/sitemap.xml
+Sitemap: https://cash.neongulf.com/sitemap.xml

@@ -15,10 +15,10 @@ const display = Fraunces({
   weight: ["500", "600", "700"],
 });
 
-const siteUrl = "https://session-cash-track.vercel.app";
+const siteUrl = "https://cash.neongulf.com";
 const title = "Shore Ledger — session cash & bank habit tracker";
 const description =
-  "Log pocket cash and bank balance after each play session. Local-first habit score, streak, and history. No game hooks. Independent fan utility — not affiliated with Rockstar.";
+  "Log pocket cash and bank balance after each play session. Local-first habit score, streak, and history. No game hooks. A NeonGulf utility — not affiliated with Rockstar.";
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
@@ -28,14 +28,15 @@ export const metadata: Metadata = {
   },
   description,
   applicationName: "Shore Ledger",
-  authors: [{ name: "Hamza Akram" }],
-  creator: "Hamza Akram",
+  authors: [{ name: "NeonGulf" }],
+  creator: "NeonGulf",
   keywords: [
     "session cash tracker",
     "bank habit tracker",
     "gaming money habits",
     "local-first PWA",
     "Shore Ledger",
+    "NeonGulf",
   ],
   manifest: "/manifest.webmanifest",
   alternates: {
