@@ -6,9 +6,15 @@ const jsonLd = {
   name: "Shore Ledger",
   applicationCategory: "LifestyleApplication",
   operatingSystem: "Any",
+  browserRequirements: "Requires JavaScript. Works offline as a PWA.",
   description:
-    "Local-first session cash and bank habit tracker PWA. Log pocket vs bank after play sessions — no game hooks.",
+    "Local-first session cash and bank habit tracker. Log pocket vs bank, banked-before-risk habit score, and streak — self-report only, no game hooks.",
   url: "https://cash.neongulf.com",
+  creator: {
+    "@type": "Organization",
+    name: "NeonGulf",
+    url: "https://neongulf.com",
+  },
   offers: {
     "@type": "Offer",
     price: "0",

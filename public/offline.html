@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#061018" />
+    <title>Offline · Shore Ledger</title>
+    <style>
+      :root {
+        color-scheme: dark;
+      }
+      body {
+        margin: 0;
+        min-height: 100dvh;
+        display: grid;
+        place-items: center;
+        padding: 1.5rem;
+        font-family: system-ui, sans-serif;
+        background:
+          radial-gradient(ellipse 100% 80% at 50% -20%, rgba(61, 214, 170, 0.12), transparent 50%),
+          #061018;
+        color: #e8f4f2;
+      }
+      main {
+        max-width: 22rem;
+        text-align: center;
+      }
+      h1 {
+        font-size: 1.5rem;
+        font-weight: 600;
+        margin: 0 0 0.75rem;
+      }
+      p {
+        margin: 0;
+        color: #8aa3a8;
+        line-height: 1.5;
+        font-size: 0.95rem;
+      }
+      button {
+        margin-top: 1.25rem;
+        border: 0;
+        border-radius: 0.75rem;
+        background: #3dd6aa;
+        color: #041018;
+        font-weight: 600;
+        padding: 0.75rem 1.25rem;
+        cursor: pointer;
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <h1>You’re offline</h1>
+      <p>
+        Shore Ledger keeps your cash habit logs on this device. Reconnect to sync
+        the app shell — your saved sessions stay in local storage.
+      </p>
+      <button type="button" onclick="location.reload()">Try again</button>
+    </main>
+  </body>
+</html>
