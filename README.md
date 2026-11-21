@@ -14,16 +14,17 @@ Session **cash / bank habit tracker** PWA under the NeonGulf brand.
 | --- | --- |
 | Log pocket cash + bank balance per session | ✅ Free · localStorage |
 | “Banked before risky job” → habit % | ✅ Free |
-| Day streak + pocket-vs-bank bar | ✅ Free |
+| Day streak + pocket-vs-bank bar + recent habit chart | ✅ Free |
 | History list (edit/delete/clear) | ✅ Free |
-| Installable PWA (manifest + SW) | ✅ |
+| Free JSON backup export/import | ✅ Free |
+| Installable PWA (manifest + offline page) | ✅ |
 | Cloud sync / CSV export / profiles | 🟨 Pro · checkout coming soon |
 
-Self-report only — **no game hooks**, APIs, or spoilers.
+Self-report only — **no game hooks**, APIs, or spoilers. Not a story mission tracker.
 
 ## Free vs Pro
 
-- **Free forever:** session logs, habit score, streak, history on this device.
+- **Free forever:** session logs, habit score, streak, history, JSON backup on this device.
 - **Pro (coming soon):** cloud sync, CSV export, multiple profiles — planned at **$4.99 one-time**. Checkout isn’t live yet; nothing is charged today.
 
 ## Run locally
@@ -43,17 +44,17 @@ npm run build && npm start
 
 - Next.js App Router + TypeScript
 - Tailwind CSS v4
-- React client state + `localStorage`
-- PWA: `public/manifest.webmanifest` + `public/sw.js`
+- React client state + hardened `localStorage`
+- PWA: `public/manifest.webmanifest` + `public/sw.js` + `offline.html`
 
 ## Deploy
 
-Linked to Vercel team project `session-cash-track`. Pushing `main` triggers production.
+Linked to Vercel team project `session-cash-track` with production domain `cash.neongulf.com`. Pushing `main` triggers production.
 
 ## Legal / product notes
 
 - Spoiler-free copy — money-habit journal, not a story tracker.
-- Affiliate disclosure footer for future gear cross-links.
+- Soft NeonGulf footer only (no product catalog on this app).
 - Plug Lemon Squeezy / Stripe when ready to sell Pro.
 
 ## License

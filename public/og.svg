@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630" fill="none">
+  <rect width="1200" height="630" fill="#061018"/>
+  <ellipse cx="200" cy="-40" rx="420" ry="280" fill="#3DD6AA" fill-opacity="0.14"/>
+  <ellipse cx="1100" cy="700" rx="380" ry="260" fill="#F2C14E" fill-opacity="0.1"/>
+  <text x="80" y="120" fill="#3DD6AA" font-family="Georgia, serif" font-size="28" letter-spacing="8">SHORE LEDGER · NEONGULF</text>
+  <text x="80" y="260" fill="#E8F4F2" font-family="Georgia, serif" font-size="72" font-weight="600">Session cash habits</text>
+  <text x="80" y="340" fill="#8AA3A8" font-family="system-ui, sans-serif" font-size="32">Pocket vs bank · habit score · streak</text>
+  <text x="80" y="520" fill="#8AA3A8" font-family="system-ui, sans-serif" font-size="24">Local-first PWA · self-report only · no game hooks</text>
+  <rect x="900" y="180" width="200" height="200" rx="40" stroke="#F2C14E" stroke-width="10" fill="#0B1C24"/>
+  <path d="M940 310c30-38 56-56 80-56s50 18 80 56" stroke="#3DD6AA" stroke-width="10" stroke-linecap="round"/>
+  <rect x="960" y="230" width="80" height="60" rx="12" stroke="#F2C14E" stroke-width="8"/>
+</svg>
